@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
+from rest_framework import mixins
 
 from .permissions import IsOwnerOrReadOnly
 from posts.models import Post, Group, Comment, Follow
@@ -40,7 +41,13 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupSerializer
 
 
-class FollowViewSet(viewsets.ModelViewSet):
+class CreateListViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
+                        viewsets.GenericViewSet):
+    """Basic class Create and List only"""
+    pass
+
+
+class FollowViewSet(CreateListViewSet):
     """Class api model Follow."""
     serializer_class = FollowSerializer
     permission_classes = [IsAuthenticated]
